@@ -38,7 +38,6 @@ class PFG:
                     "max": 2, #Maximum value
                     "step": 0.05 #Slider's step
                 }),
-                "attention_dim":  ((768, 1024, 2048), ),
                 "image": ("IMAGE", ), 
                 "model_name": (get_file_list(os.path.join(CURRENT_DIR,"models")), ),
             }
@@ -47,7 +46,7 @@ class PFG:
     FUNCTION = "add_pfg"
     CATEGORY = "loaders"
 
-    def add_pfg(self, positive, negative, pfg_scale, image, attention_dim, model_name):
+    def add_pfg(self, positive, negative, pfg_scale, image, model_name):
         # load weight
         pfg_weight = torch.load(os.path.join(CURRENT_DIR, "models/" + model_name))
         weight = pfg_weight["pfg_linear.weight"].cpu()
@@ -58,16 +57,16 @@ class PFG:
         tensor = np.array(tensor, dtype=np.uint8)
         image = Image.fromarray(tensor[0])
         
+        # text_embs
+        cond = positive[0][0]
+        uncond = negative[0][0]
+
         # tagger特徴量の計算
         pfg_feature = self.infer(image)
         
         # pfgの計算
         pfg_cond = (weight @ pfg_feature + bias) * pfg_scale
-        pfg_cond = pfg_cond.reshape(1, -1, attention_dim)
-        
-        # text_embs
-        cond = positive[0][0]
-        uncond = negative[0][0]
+        pfg_cond = pfg_cond.reshape(1, -1, cond.shape[2])
 
         # cond側
         pfg_cond = pfg_cond.to(cond.device, dtype=cond.dtype)
