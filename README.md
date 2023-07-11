@@ -9,4 +9,4 @@ ComfyUI version of https://github.com/laksjdjf/pfg-webui
 3. Open pfg node from ```loaders``` and connect ```CONDITIONING``` from Prompt to Sampler
 
 # Image
-![comfy-pfg](https://github.com/laksjdjf/pfg-ComfyUI/assets/22386664/a7fd1b5d-8080-419a-9f1a-f7d564c40298)
+![comfy-pfg](https://github.com/laksjdjf/pfg-ComfyUI/assets/22386664/bb07df58-7dd5-48ee-bb96-826dac6b6ec5)
